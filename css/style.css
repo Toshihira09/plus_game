@@ -1,0 +1,91 @@
+body{
+  background:radial-gradient(white,#42f4f4);
+}
+
+#tile_area{
+  font-size: 30px;
+  position: absolute;
+  top: 52%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#count_area{
+  left: 50%;
+  top: 20%;
+  position: absolute;
+  transform: translate(-50%, -50%);
+}
+
+#count{
+  font-size: 30;
+  font-family: fantasy;
+}
+
+#theme_number{
+  position: absolute;
+  left: 50%;
+  top: 23%;
+  transform: translate(-50%, -50%);
+}
+
+#theme_number_area{
+  color: red;
+  font-size: 40px;
+  font-family:arial black;
+}
+
+#answer_area{
+  font-size: 40px;
+  top: 10%;
+  left: 50%;
+  position: absolute;
+  transform: translate(-50%, -50%);
+}
+
+#point_area{
+  position: absolute;
+  left: 50%;
+  top: 27%;
+  transform: translate(-50%, -50%);
+}
+
+#point{
+  font-size: 30px;
+  position: absolute;
+  left: 50%;
+  top: 30%;
+  transform: translate(-50%, -50%);
+}
+
+.play_number{
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  border: 6px ridge;
+  background-color: white;
+}
+
+.correct_answer{
+  background-color: yellow;
+  color: black;
+  border: ridge;
+}
+
+.wrong_answer{
+  background-color: blue;
+  color: white;
+  border: ridge;
+}
+
+#game_result{
+  left: 50%;
+  top: 50%;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  font-size: 30px;
+  border: 3px;
+  background-color: red;
+  color: white;
+}
+
