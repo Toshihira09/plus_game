@@ -1,20 +1,39 @@
 body{
-  background:radial-gradient(white,#42f4f4);
+  background: linear-gradient(-225deg, #2CD8D5 0%, #C5C1FF 56%, #FFBAC3 85%);
+}
+
+#round_area{
+  position: relative;
+  top: 15%;
+  left: 49%;
+  font-size: 35px;
+}
+
+#start{
+  position: relative;
+  top: 40%;
+  left: 45%;
+}
+
+#reset{
+  position: relative;
+  left: 44%;
+  top: 16%;
+}
+
+#play_area{
+  position: relative;
+  top: 20%;
+  left: 40%;
 }
 
 #tile_area{
   font-size: 30px;
-  position: absolute;
-  top: 52%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  position: relative;
 }
 
 #count_area{
-  left: 50%;
-  top: 20%;
-  position: absolute;
-  transform: translate(-50%, -50%);
+  position: relative;
 }
 
 #count{
@@ -23,10 +42,7 @@ body{
 }
 
 #theme_number{
-  position: absolute;
-  left: 50%;
-  top: 23%;
-  transform: translate(-50%, -50%);
+  position: relative;
 }
 
 #theme_number_area{
@@ -37,25 +53,16 @@ body{
 
 #answer_area{
   font-size: 40px;
-  top: 10%;
-  left: 50%;
-  position: absolute;
-  transform: translate(-50%, -50%);
+  position: relative;
 }
 
 #point_area{
-  position: absolute;
-  left: 50%;
-  top: 27%;
-  transform: translate(-50%, -50%);
+  position: relative;
 }
 
 #point{
   font-size: 30px;
-  position: absolute;
-  left: 50%;
-  top: 30%;
-  transform: translate(-50%, -50%);
+  position: relative;
 }
 
 .play_number{
@@ -70,22 +77,28 @@ body{
   background-color: yellow;
   color: black;
   border: ridge;
+  width: 120px;
+  text-align: center;
 }
 
 .wrong_answer{
   background-color: blue;
   color: white;
   border: ridge;
+  width: 120px;
+  text-align: center;
 }
 
 #game_result{
-  left: 50%;
-  top: 50%;
-  position: absolute;
-  transform: translate(-50%, -50%);
+  position: relative;
   font-size: 30px;
   border: 3px;
   background-color: red;
   color: white;
+  width: 170;
+  text-align: center;
+  left: 46%;
+  top: -300px;
 }
+
 

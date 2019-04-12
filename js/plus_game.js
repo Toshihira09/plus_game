@@ -5,15 +5,14 @@
   });
 
   window.app = {
-    number_tile: 0,
     width_tile: 0,
     height_tile: 0,
     width_tile_name: 0,
     height_tile_name: 0,
     theme_number: 0,
     sum_number: 0,
-    choice_number: 0,
     point: 0,
+    initial_count: 0,
     count: 0,
     click_count: 0,
     timer: false,
@@ -21,56 +20,17 @@
     next_stage_number: 0,
     round: 0,
     initialize: function() {
-      this.width_tile = 5;
-      this.height_tile = 5;
-      this.round = 0;
-      this.point = 50;
-      this.increaseHeightTile();
       this.choiceParameter();
+      this.increaseHeightTile();
       this.hideElement();
-      this.setBind();
-      return this.showPoint();
-    },
-    hideSelecter: function(selecter) {
-      return $(selecter).css({
-        'display': 'none'
-      });
-    },
-    showSelecter: function(selecter) {
-      return $(selecter).css({
-        'display': 'block'
-      });
-    },
-    hideElement: function() {
-      $('#start').html("<img src=\"./image/start.png\">");
-      this.hideSelecter('#tile_area');
-      this.hideSelecter('#round');
-      this.hideSelecter('#count_area');
-      this.hideSelecter('#theme_number');
-      this.hideSelecter('#answer_area');
-      this.hideSelecter('#point_area');
-      this.hideSelecter('#point');
-      this.hideSelecter('#game_result');
-      return this.hideSelecter('#reset');
+      return this.setBind();
     },
     choiceParameter: function() {
-      this.round += 1;
-      $('#round').html(this.round);
+      this.width_tile = 5;
+      this.height_tile = 5;
       this.click_count = this.width_tile * this.height_tile;
       this.sum_number = 0;
       return this.next_stage_number = 20;
-    },
-    showPoint: function() {
-      return $('#point').html(this.point);
-    },
-    showThemeNumber: function() {
-      this.stopCountTime();
-      this.count = 10;
-      this.click_number = 0;
-      this.sum_number = 0;
-      this.theme_number = _.random(1, 19);
-      this.startCountTime();
-      return $('#theme_number_area').html(this.theme_number);
     },
     increaseWidthTile: function(selecter) {
       var i, j, number_tile, ref, results;
@@ -94,6 +54,27 @@
       }
       return results;
     },
+    hideElement: function() {
+      this.hideSelecter('.before_game');
+      return $('#start').html("<img src=\"./image/start.png\">");
+    },
+    hideSelecter: function(selecter) {
+      return $(selecter).css({
+        'display': 'none'
+      });
+    },
+    showSelecter: function(selecter) {
+      return $(selecter).css({
+        'display': 'block'
+      });
+    },
+    showThemeNumber: function() {
+      this.stopCountTime();
+      this.click_number = 0;
+      this.sum_number = 0;
+      this.theme_number = _.random(1, 19);
+      return $('#theme_number_area').html(this.theme_number);
+    },
     setBind: function() {
       var self;
       self = this;
@@ -104,64 +85,83 @@
         return self.choiceNumber(this);
       });
       return $('#reset').bind('click', function() {
-        return self.changeNextGame();
+        return self.changeStage();
       });
     },
     startGame: function() {
+      this.round = 1;
+      $('#round').html(this.round);
+      this.point = 50;
+      $('#point').html(this.point);
       this.hideSelecter('#start');
-      this.showSelecter('#round');
-      this.showSelecter('#tile_area');
-      this.showSelecter('#count_area');
-      this.showSelecter('#theme_number');
-      this.showSelecter('#answer_area');
-      this.showSelecter('#point_area');
-      this.showSelecter('#point');
-      this.showSelecter('#game_result');
-      return this.showThemeNumber();
+      this.showSelecter('.before_game');
+      $('#round').css({
+        'display': 'inline'
+      });
+      this.showThemeNumber();
+      this.initial_count = 10;
+      this.count = this.initial_count;
+      return this.startCountTime();
     },
     choiceNumber: function(selecter) {
+      var choice_number;
       if ($(selecter).hasClass('unusable')) {
         $(selecter).removeClass('unusable');
-        this.choice_number = $(selecter).data('number');
-        this.sum_number -= this.choice_number;
+        this.sum_number -= choice_number;
         return $(selecter).css({
           'background-color': 'white'
         });
       } else {
-        this.choice_number = $(selecter).data('number');
+        choice_number = $(selecter).data('number');
         this.click_count -= 1;
-        this.sum_number = this.sum_number + this.choice_number;
+        this.sum_number = this.sum_number + choice_number;
         this.click_number += 1;
         $(selecter).addClass('unusable');
-        return this.calculationResult(selecter);
+        $(selecter).css({
+          'background-color': 'gray'
+        });
+        return this.calculationResult();
       }
     },
-    calculationResult: function(selecter) {
+    calculationResult: function() {
       if (this.sum_number === this.theme_number) {
+        this.showSelecter('#answer_area');
+        $('#answer_area').removeClass('wrong_answer');
         $('#answer_area').addClass('correct_answer');
         $('#answer_area').html("good");
         this.disableTile('.unusable');
+        $('.unusable').css({
+          'pointer-events': 'none'
+        });
         this.point += this.click_number * 10;
-        this.showPoint();
+        $('#point').html(this.point);
         this.showThemeNumber();
+        this.count = this.initial_count;
+        this.startCountTime();
+        this.showGameResult(this.round, 3, "Excellent");
         if (this.click_count <= this.next_stage_number) {
-          return this.changeNextGame();
+          this.round += 1;
+          return this.changeStage();
         }
       } else if (this.sum_number > this.theme_number) {
+        this.showSelecter('#answer_area');
+        $('#answer_area').removeClass('correct_answer');
         $('#answer_area').addClass('wrong_answer');
         $('#answer_area').html("bad");
         this.disableTile('.unusable');
-        this.point -= 10;
-        this.showPoint();
-        this.showThemeNumber();
-        this.showGameResult(this.point);
-        if (this.click_count <= this.next_stage_number) {
-          return this.changeNextGame();
-        }
-      } else {
-        return $(selecter).css({
-          'background-color': 'gray'
+        $('.unusable').css({
+          'pointer-events': 'none'
         });
+        this.point -= 10;
+        $('#point').html(this.point);
+        this.showThemeNumber();
+        this.count = this.initial_count;
+        this.startCountTime();
+        this.showGameResult(this.point, 0, "GameOver");
+        if (this.click_count <= this.next_stage_number) {
+          this.round += 1;
+          return this.changeStage();
+        }
       }
     },
     disableTile: function(selecter) {
@@ -180,8 +180,8 @@
         self.count -= 1;
         if (self.count === 0) {
           $('#count').html(self.count);
-          self.disableTile('.unusable');
-          return self.showGameResult(self.count);
+          self.showSelecter('.to_next_game');
+          return self.showGameResult(self.count, 0, "GameOver");
         } else {
           return self.startCountTime();
         }
@@ -190,48 +190,54 @@
     stopCountTime: function() {
       return clearTimeout(this.timer);
     },
-    showGameResult: function(selecter) {
-      if (selecter === 0) {
+    showGameResult: function(selecter, number, result) {
+      if (selecter === number) {
         this.stopCountTime();
         this.disableTile('.play_number');
         this.showSelecter('#reset');
         this.showSelecter('#game_result');
-        $('#game_result').html("GameOver");
+        $('#game_result').html(result);
         return $('#reset').html("<img src=\"./image/reset.png\">");
       }
     },
-    changeNextGame: function() {
+    changeStage: function() {
       $('.play_number').removeClass('unusable');
       $('#tile_area').empty();
-      $('.play_number').html('');
-      this.height_tile += 1;
-      this.width_tile += 1;
+      this.hideSelecter('#reset');
+      this.hideSelecter('#game_result');
+      $('#reset').unbind('click');
+      if (this.count === 0 || this.point === 0) {
+        this.resetStage();
+      }
+      if (this.round > 1) {
+        return this.changeNextStage();
+      }
+    },
+    resetStage: function() {
       this.choiceParameter();
-      this.inputNumber();
-      this.increaseHeightTile();
-      $('.play_number').css({
-        'background-color': 'white'
-      });
+      this.round = 1;
+      this.startGame();
+      this.hideSelecter('.to_next_game');
       $('.play_number').css({
         'pointer-events': 'auto'
       });
-      this.showThemeNumber();
-      this.hideSelecter('#reset');
-      this.hideSelecter('#game_result');
+      this.increaseHeightTile();
       return this.setBind();
     },
-    inputNumber: function() {
-      var i, j, number_tile, ref, results;
-      this.width_tile_name = 0;
-      console.log(this.click_count);
-      results = [];
-      for (i = j = 0, ref = this.click_count; 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
-        this.width_tile_name += 1;
-        number_tile = _.random(1, 9);
-        $("#width" + this.width_tile_name).html(number_tile);
-        results.push($("#width" + this.width_tile_name).data('number', number_tile));
-      }
-      return results;
+    changeNextStage: function() {
+      this.choiceParameter();
+      this.height_tile += 1;
+      this.width_tile += 1;
+      this.initial_count -= 1;
+      this.count = this.initial_count;
+      $('.play_number').css({
+        'pointer-events': 'auto'
+      });
+      this.increaseHeightTile();
+      this.showThemeNumber();
+      this.startCountTime();
+      this.setBind();
+      return $('#round').html(this.round);
     }
   };
 

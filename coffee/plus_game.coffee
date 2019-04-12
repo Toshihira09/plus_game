@@ -2,15 +2,14 @@ $ ->
   app.initialize()
 
 window.app =
-  number_tile: 0
   width_tile: 0
   height_tile: 0
   width_tile_name: 0
   height_tile_name: 0
   theme_number: 0
   sum_number: 0
-  choice_number: 0
   point: 0
+  initial_count: 0
   count: 0
   click_count: 0
   timer: false
@@ -18,52 +17,17 @@ window.app =
   next_stage_number: 0
   round: 0
   initialize:->
-    @width_tile = 5
-    @height_tile = 5
-    @round = 0
-    @point = 50
-    @increaseHeightTile()
     @choiceParameter()
+    @increaseHeightTile()
     @hideElement()
     @setBind()
-    @showPoint()
-
-  hideSelecter:(selecter) ->
-    $(selecter).css 'display':'none'
-
-  showSelecter:(selecter) ->
-    $(selecter).css 'display':'block'
-
-  hideElement: ->
-    $('#start').html """<img src="./image/start.png">"""
-    @hideSelecter '#tile_area'
-    @hideSelecter '#round'
-    @hideSelecter '#count_area'
-    @hideSelecter '#theme_number'
-    @hideSelecter '#answer_area'
-    @hideSelecter '#point_area'
-    @hideSelecter '#point'
-    @hideSelecter '#game_result'
-    @hideSelecter '#reset'
 
   choiceParameter: ->
-    @round += 1
-    $('#round').html @round
+    @width_tile = 5
+    @height_tile = 5
     @click_count = @width_tile * @height_tile
     @sum_number = 0
     @next_stage_number = 20
-
-  showPoint: ->
-    $('#point').html @point
-
-  showThemeNumber: ->
-    @stopCountTime()
-    @count = 10
-    @click_number = 0
-    @sum_number = 0
-    @theme_number = _.random 1,19
-    @startCountTime()
-    $('#theme_number_area').html @theme_number
 
   increaseWidthTile:(selecter) ->
     for i in [0...@width_tile]
@@ -79,6 +43,23 @@ window.app =
       $('#tile_area').append """<tr id="height#{@height_tile_name}"></tr>"""
       @increaseWidthTile "#height#{@height_tile_name}"
 
+  hideElement: ->
+    @hideSelecter '.before_game'
+    $('#start').html """<img src="./image/start.png">"""
+
+  hideSelecter:(selecter) ->
+    $(selecter).css 'display':'none'
+
+  showSelecter:(selecter) ->
+    $(selecter).css 'display':'block'
+
+  showThemeNumber: ->
+    @stopCountTime()
+    @click_number = 0
+    @sum_number = 0
+    @theme_number = _.random 1,19
+    $('#theme_number_area').html @theme_number
+
   setBind: ->
     self = @
     $('#start').bind 'click', ->
@@ -86,56 +67,68 @@ window.app =
     $('.play_number').bind 'click', ->
       self.choiceNumber @
     $('#reset').bind 'click', ->
-      self.changeNextGame()
+      self.changeStage()
 
   startGame: ->
+    @round = 1
+    $('#round').html @round
+    @point = 50
+    $('#point').html @point
     @hideSelecter '#start'
-    @showSelecter '#round'
-    @showSelecter '#tile_area'
-    @showSelecter '#count_area'
-    @showSelecter '#theme_number'
-    @showSelecter '#answer_area'
-    @showSelecter '#point_area'
-    @showSelecter '#point'
-    @showSelecter '#game_result'
+    @showSelecter '.before_game'
+    $('#round').css 'display':'inline'
     @showThemeNumber()
+    @initial_count = 10
+    @count = @initial_count
+    @startCountTime()
 
   choiceNumber:(selecter) ->
     if $(selecter).hasClass('unusable')
       $(selecter).removeClass 'unusable'
-      @choice_number = $(selecter).data 'number'
-      @sum_number -= @choice_number
+      @sum_number -= choice_number
       $(selecter).css 'background-color':'white'
     else
-      @choice_number = $(selecter).data 'number'
+      choice_number = $(selecter).data 'number'
       @click_count -= 1
-      @sum_number = @sum_number + @choice_number
+      @sum_number = @sum_number + choice_number
       @click_number += 1
       $(selecter).addClass 'unusable'
-      @calculationResult selecter
+      $(selecter).css 'background-color':'gray'
+      @calculationResult()
 
-  calculationResult:(selecter) ->
+  calculationResult: ->
     if @sum_number is @theme_number
+        @showSelecter '#answer_area'
+        $('#answer_area').removeClass 'wrong_answer'
         $('#answer_area').addClass 'correct_answer'
         $('#answer_area').html "good"
         @disableTile '.unusable'
+        $('.unusable').css 'pointer-events':'none'
         @point += @click_number * 10
-        @showPoint()
+        $('#point').html @point
         @showThemeNumber()
+        @count = @initial_count
+        @startCountTime()
+        @showGameResult @round, 3, "Excellent"
         if @click_count <= @next_stage_number
-          @changeNextGame()
+          @round += 1
+          @changeStage()
      else if @sum_number > @theme_number
+        @showSelecter '#answer_area'
+        $('#answer_area').removeClass 'correct_answer'
         $('#answer_area').addClass 'wrong_answer'
         $('#answer_area').html "bad"
         @disableTile '.unusable'
+        $('.unusable').css 'pointer-events':'none'
         @point -= 10
-        @showPoint()
+        $('#point').html @point
         @showThemeNumber()
-        @showGameResult @point
+        @count = @initial_count
+        @startCountTime()
+        @showGameResult @point, 0, "GameOver"
         if @click_count <= @next_stage_number
-          @changeNextGame()
-     else
-        $(selecter).css 'background-color':'gray'
+          @round += 1
+          @changeStage()
 
   disableTile:(selecter) ->
     $(selecter).css 'background-color':'black'
@@ -148,8 +141,9 @@ window.app =
       self.count -= 1
       if self.count is 0
         $('#count').html self.count
-        self.disableTile '.unusable'
-        self.showGameResult self.count
+        #self.disableTile '.unusable'
+        self.showSelecter '.to_next_game'
+        self.showGameResult self.count, 0, "GameOver"
       else
         self.startCountTime()
     ,1000
@@ -157,36 +151,44 @@ window.app =
   stopCountTime: ->
     clearTimeout @timer
 
-  showGameResult:(selecter) ->
-    if selecter is 0
+  showGameResult:(selecter, number, result) ->
+    if selecter is number
       @stopCountTime()
       @disableTile '.play_number'
       @showSelecter '#reset'
       @showSelecter '#game_result'
-      $('#game_result').html "GameOver"
+      $('#game_result').html result
       $('#reset').html """<img src="./image/reset.png">"""
 
-  changeNextGame: ->
+  changeStage: ->
     $('.play_number').removeClass 'unusable'
     $('#tile_area').empty()
-    $('.play_number').html ''
-    @height_tile += 1
-    @width_tile += 1
-    @choiceParameter()
-    @inputNumber()
-    @increaseHeightTile()
-    $('.play_number').css 'background-color':'white'
-    $('.play_number').css 'pointer-events':'auto'
-    @showThemeNumber()
     @hideSelecter '#reset'
     @hideSelecter '#game_result'
+    $('#reset').unbind 'click'
+    if @count is 0 or @point is 0
+      @resetStage()
+    if @round > 1
+      @changeNextStage()
+
+  resetStage: ->
+    @choiceParameter()
+    @round = 1
+    @startGame()
+    @hideSelecter '.to_next_game'
+    $('.play_number').css 'pointer-events':'auto'
+    @increaseHeightTile()
     @setBind()
 
-  inputNumber: ->
-    @width_tile_name = 0
-    console.log @click_count
-    for i in [0...@click_count]
-      @width_tile_name += 1
-      number_tile = _.random 1, 9
-      $("#width#{@width_tile_name}").html number_tile
-      $("#width#{@width_tile_name}").data 'number', number_tile
+  changeNextStage: ->
+    @choiceParameter()
+    @height_tile += 1
+    @width_tile += 1
+    @initial_count -= 1
+    @count = @initial_count
+    $('.play_number').css 'pointer-events':'auto'
+    @increaseHeightTile()
+    @showThemeNumber()
+    @startCountTime()
+    @setBind()
+    $('#round').html @round
