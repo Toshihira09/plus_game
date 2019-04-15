@@ -32,14 +32,6 @@
         'display': 'block'
       });
     },
-    showThemeNumber: function() {
-      this.stopCountTime();
-      this.click_number = 0;
-      this.sum_number = 0;
-      this.theme_number = _.random(1, 19);
-      $('#theme_number_area').html(this.theme_number);
-      return $('#point').html(this.point);
-    },
     setBind: function() {
       var self;
       self = this;
@@ -96,8 +88,16 @@
       });
       this.showThemeNumber();
       this.hideSelecter('.to_next_game');
-      this.hideSelecter('#setting');
-      return this.startCountTime();
+      return this.hideSelecter('#setting');
+    },
+    showThemeNumber: function() {
+      this.stopCountTime();
+      this.startCountTime();
+      this.click_number = 0;
+      this.sum_number = 0;
+      this.theme_number = _.random(1, 19);
+      $('#theme_number_area').html(this.theme_number);
+      return $('#point').html(this.point);
     },
     increaseHeightTile: function() {
       var i, j, ref, results;
@@ -139,17 +139,15 @@
         this.showResult('wrong_answer', 'correct_answer', "good");
         this.disableTile('.unusable');
         this.point += this.click_number * 10;
-        this.showThemeNumber();
         this.count = this.initial_count;
-        this.startCountTime();
+        this.showThemeNumber();
         return this.toNextGame();
       } else if (this.sum_number > this.theme_number) {
         this.showResult('correct_answer', 'wrong_answer', "bad");
         this.disableTile('.unusable');
         this.point -= 10;
-        this.showThemeNumber();
         this.count = this.initial_count;
-        this.startCountTime();
+        this.showThemeNumber();
         this.showGameResult(this.point, 0, "GameOver");
         return this.toNextGame();
       }

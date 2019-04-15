@@ -25,14 +25,6 @@ window.app =
   showSelecter:(selecter) ->
     $(selecter).css 'display':'block'
 
-  showThemeNumber: ->
-    @stopCountTime()
-    @click_number = 0
-    @sum_number = 0
-    @theme_number = _.random 1,19
-    $('#theme_number_area').html @theme_number
-    $('#point').html @point
-
   setBind: ->
     self = @
     $('#start').bind 'click', ->
@@ -81,7 +73,15 @@ window.app =
     @showThemeNumber()
     @hideSelecter '.to_next_game'
     @hideSelecter '#setting'
+
+  showThemeNumber: ->
+    @stopCountTime()
     @startCountTime()
+    @click_number = 0
+    @sum_number = 0
+    @theme_number = _.random 1,19
+    $('#theme_number_area').html @theme_number
+    $('#point').html @point
 
   increaseHeightTile: ->
     for i in [0...@height_tile]
@@ -113,17 +113,15 @@ window.app =
         @showResult 'wrong_answer', 'correct_answer', "good"
         @disableTile '.unusable'
         @point += @click_number * 10
-        @showThemeNumber()
         @count = @initial_count
-        @startCountTime()
+        @showThemeNumber()
         @toNextGame()
      else if @sum_number > @theme_number
         @showResult 'correct_answer', 'wrong_answer' , "bad"
         @disableTile '.unusable'
         @point -= 10
-        @showThemeNumber()
         @count = @initial_count
-        @startCountTime()
+        @showThemeNumber()
         @showGameResult @point, 0, "GameOver"
         @toNextGame()
 
