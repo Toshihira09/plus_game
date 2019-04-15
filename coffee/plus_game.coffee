@@ -171,7 +171,6 @@ window.app =
     $('#tile_area').empty()
     @hideSelecter '#reset'
     @hideSelecter '#game_result'
-    $('#reset').unbind 'click'
     if @count is 0 or @point is 0
       @resetStage()
     if @round > 1

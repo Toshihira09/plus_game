@@ -206,7 +206,6 @@
       $('#tile_area').empty();
       this.hideSelecter('#reset');
       this.hideSelecter('#game_result');
-      $('#reset').unbind('click');
       if (this.count === 0 || this.point === 0) {
         this.resetStage();
       }
