@@ -22,34 +22,6 @@
       this.hideSelecter('#setting');
       return this.setBind();
     },
-    setParameter: function(round, initial_count, point) {
-      this.round = round;
-      this.initial_count = initial_count;
-      this.count = initial_count;
-      this.point = point;
-      this.click_count = this.width_tile * this.height_tile;
-      this.sum_number = 0;
-      return this.hideSelecter('#setting');
-    },
-    increaseHeightTile: function() {
-      var i, j, ref, results;
-      results = [];
-      for (i = j = 0, ref = this.height_tile; 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
-        $('#tile_area').append("<tr id=\"height" + (i + 1) + "\"></tr>");
-        results.push(this.increaseWidthTile("#height" + (i + 1)));
-      }
-      return results;
-    },
-    increaseWidthTile: function(selecter) {
-      var i, j, number_tile, ref, results;
-      results = [];
-      for (i = j = 0, ref = this.width_tile; 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
-        number_tile = _.random(1, 9);
-        $(selecter).append("<td class= \"width" + (i + 1) + " play_number\" data-number=\"" + number_tile + "\"></td>");
-        results.push($(selecter + " .width" + (i + 1)).html(number_tile));
-      }
-      return results;
-    },
     hideSelecter: function(selecter) {
       return $(selecter).css({
         'display': 'none'
@@ -76,11 +48,7 @@
         return self.hideSelecter('#start');
       });
       $('#play_game').bind('click', function() {
-        self.getParameter();
-        console.log(self.width_tile);
-        console.log(self.height_tile);
-        self.setParameter(1, 10, 50);
-        return self.startGame();
+        return self.getParameter();
       });
       $('#tile_area').on('click', '.play_number', function() {
         return self.choiceNumber(this);
@@ -97,11 +65,29 @@
       height = height_setting.height_number.value;
       this.width_tile = Number(width);
       this.height_tile = Number(height);
-      console.log(this.width_tile);
-      return console.log(this.height_tile);
+      if (width === "" || height === "") {
+        return $('#caution').html("5~10の間の数字を入力してください！！");
+      } else if (width < 5 || height < 5) {
+        return $('#caution').html("5~10の間の数字を入力してください！！");
+      } else if (width > 10 || height > 10) {
+        return $('#caution').html("5~10の間の数字を入力してください！！");
+      } else {
+        this.setParameter(1, 10, 50);
+        return this.startGame();
+      }
+    },
+    setParameter: function(round, initial_count, point) {
+      this.round = round;
+      this.initial_count = initial_count;
+      this.count = initial_count;
+      this.point = point;
+      this.click_count = this.width_tile * this.height_tile;
+      this.sum_number = 0;
+      return this.hideSelecter('#setting');
     },
     startGame: function() {
       this.increaseHeightTile();
+      this.showSelecter('#play_area');
       this.showSelecter('.before_game');
       $('#round').html(this.round);
       $('.play_number').css({
@@ -111,6 +97,25 @@
       this.hideSelecter('.to_next_game');
       this.hideSelecter('#setting');
       return this.startCountTime();
+    },
+    increaseHeightTile: function() {
+      var i, j, ref, results;
+      results = [];
+      for (i = j = 0, ref = this.height_tile; 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
+        $('#tile_area').append("<tr id=\"height" + (i + 1) + "\"></tr>");
+        results.push(this.increaseWidthTile("#height" + (i + 1)));
+      }
+      return results;
+    },
+    increaseWidthTile: function(selecter) {
+      var i, j, number_tile, ref, results;
+      results = [];
+      for (i = j = 0, ref = this.width_tile; 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
+        number_tile = _.random(1, 9);
+        $(selecter).append("<td class= \"width" + (i + 1) + " play_number\" data-number=\"" + number_tile + "\"></td>");
+        results.push($(selecter + " .width" + (i + 1)).html(number_tile));
+      }
+      return results;
     },
     choiceNumber: function(selecter) {
       var choice_number;

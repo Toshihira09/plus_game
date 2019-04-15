@@ -7,23 +7,24 @@
   </head>
 <body>
 
-  <div id="round_area" class="before_game">LV<span id="round"></span></div>
   <div id="start"><img src="image/start.png" alt=""></div>
   <div id="reset" class="before_game to_next_game"></div>
 
   <div id="setting">
+    <div id="caution"></div>
     <form id="width_setting">
       ヨコ
-    <input type="number" name="width_number" min="1">
+    <input type="number" name="width_number" min="5" max="10">
     </form>
     <form id="height_setting">
       タテ
-    <input type="number" name="height_number" min="1">
+    <input type="number" name="height_number" min="5" max="10">
     </form>
     <div id="play_game"><img src="image/play_game.png" alt=""></div>
   </div>
 
   <div id="play_area">
+    <div id="round_area" class="before_game">LV<span id="round"></span></div>
     <table id="tile_area" class="before_game">
     </table>
 

@@ -19,26 +19,6 @@ window.app =
     @hideSelecter '#setting'
     @setBind()
 
-  setParameter:(round, initial_count, point) ->
-    @round = round
-    @initial_count = initial_count
-    @count = initial_count
-    @point = point
-    @click_count = @width_tile * @height_tile
-    @sum_number = 0
-    @hideSelecter '#setting'
-
-  increaseHeightTile: ->
-    for i in [0...@height_tile]
-      $('#tile_area').append """<tr id="height#{i + 1}"></tr>"""
-      @increaseWidthTile "#height#{i + 1}"
-
-  increaseWidthTile:(selecter) ->
-    for i in [0...@width_tile]
-      number_tile = _.random 1, 9
-      $(selecter).append """<td class= "width#{i + 1} play_number" data-number="#{number_tile}"></td>"""
-      $("#{selecter} .width#{i + 1}").html number_tile
-
   hideSelecter:(selecter) ->
     $(selecter).css 'display':'none'
 
@@ -60,10 +40,6 @@ window.app =
       self.hideSelecter '#start'
     $('#play_game').bind 'click', ->
       self.getParameter()
-      console.log self.width_tile
-      console.log self.height_tile
-      self.setParameter(1, 10, 50)
-      self.startGame()
     $('#tile_area').on 'click', '.play_number', ->
       self.choiceNumber @
     $('#reset').bind 'click', ->
@@ -76,11 +52,28 @@ window.app =
     height = height_setting.height_number.value
     @width_tile = Number width
     @height_tile = Number height
-    console.log @width_tile
-    console.log @height_tile
+    if width is "" or height is ""
+      $('#caution').html "5~10の間の数字を入力してください！！"
+    else if width < 5 or height < 5
+      $('#caution').html "5~10の間の数字を入力してください！！"
+    else if width > 10 or height > 10
+      $('#caution').html "5~10の間の数字を入力してください！！"
+    else
+      @setParameter(1, 10, 50)
+      @startGame()
+
+  setParameter:(round, initial_count, point) ->
+    @round = round
+    @initial_count = initial_count
+    @count = initial_count
+    @point = point
+    @click_count = @width_tile * @height_tile
+    @sum_number = 0
+    @hideSelecter '#setting'
 
   startGame: ->
     @increaseHeightTile()
+    @showSelecter '#play_area'
     @showSelecter '.before_game'
     $('#round').html @round
     $('.play_number').css 'pointer-events':'auto'
@@ -88,6 +81,17 @@ window.app =
     @hideSelecter '.to_next_game'
     @hideSelecter '#setting'
     @startCountTime()
+
+  increaseHeightTile: ->
+    for i in [0...@height_tile]
+      $('#tile_area').append """<tr id="height#{i + 1}"></tr>"""
+      @increaseWidthTile "#height#{i + 1}"
+
+  increaseWidthTile:(selecter) ->
+    for i in [0...@width_tile]
+      number_tile = _.random 1, 9
+      $(selecter).append """<td class= "width#{i + 1} play_number" data-number="#{number_tile}"></td>"""
+      $("#{selecter} .width#{i + 1}").html number_tile
 
   choiceNumber:(selecter) ->
     choice_number = $(selecter).data 'number'
