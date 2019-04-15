@@ -72,6 +72,7 @@
       } else if (width > 10 || height > 10) {
         return $('#caution').html("5~10の間の数字を入力してください！！");
       } else {
+        $('#tile_area').empty();
         this.setParameter(1, 10, 50);
         return this.startGame();
       }

@@ -59,6 +59,7 @@ window.app =
     else if width > 10 or height > 10
       $('#caution').html "5~10の間の数字を入力してください！！"
     else
+      $('#tile_area').empty()
       @setParameter(1, 10, 50)
       @startGame()
 
