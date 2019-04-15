@@ -7,8 +7,6 @@
   window.app = {
     width_tile: 0,
     height_tile: 0,
-    width_tile_name: 0,
-    height_tile_name: 0,
     theme_number: 0,
     sum_number: 0,
     point: 0,
@@ -18,45 +16,39 @@
     timer: false,
     click_number: 0,
     next_stage_number: 0,
+    NEXT_STAGE_NUMBER: 20,
     round: 0,
     initialize: function() {
-      this.choiceParameter();
-      this.increaseHeightTile();
-      this.hideElement();
+      this.hideSelecter('#setting');
       return this.setBind();
     },
-    choiceParameter: function() {
-      this.width_tile = 5;
-      this.height_tile = 5;
+    setParameter: function(round, initial_count, point) {
+      this.round = round;
+      this.initial_count = initial_count;
+      this.count = initial_count;
+      this.point = point;
       this.click_count = this.width_tile * this.height_tile;
       this.sum_number = 0;
-      return this.next_stage_number = 20;
-    },
-    increaseWidthTile: function(selecter) {
-      var i, j, number_tile, ref, results;
-      results = [];
-      for (i = j = 0, ref = this.width_tile; 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
-        this.width_tile_name += 1;
-        number_tile = _.random(1, 9);
-        $(selecter).append("<td id=\"width" + this.width_tile_name + "\" class= \"play_number\" data-number=\"" + number_tile + "\"></td>");
-        $(selecter).data('number', 'number_tile');
-        results.push($("#width" + this.width_tile_name).html(number_tile));
-      }
-      return results;
+      return this.hideSelecter('#setting');
     },
     increaseHeightTile: function() {
       var i, j, ref, results;
       results = [];
       for (i = j = 0, ref = this.height_tile; 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
-        this.height_tile_name += 1;
-        $('#tile_area').append("<tr id=\"height" + this.height_tile_name + "\"></tr>");
-        results.push(this.increaseWidthTile("#height" + this.height_tile_name));
+        $('#tile_area').append("<tr id=\"height" + (i + 1) + "\"></tr>");
+        results.push(this.increaseWidthTile("#height" + (i + 1)));
       }
       return results;
     },
-    hideElement: function() {
-      this.hideSelecter('.before_game');
-      return $('#start').html("<img src=\"./image/start.png\">");
+    increaseWidthTile: function(selecter) {
+      var i, j, number_tile, ref, results;
+      results = [];
+      for (i = j = 0, ref = this.width_tile; 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
+        number_tile = _.random(1, 9);
+        $(selecter).append("<td class= \"width" + (i + 1) + " play_number\" data-number=\"" + number_tile + "\"></td>");
+        results.push($(selecter + " .width" + (i + 1)).html(number_tile));
+      }
+      return results;
     },
     hideSelecter: function(selecter) {
       return $(selecter).css({
@@ -73,96 +65,100 @@
       this.click_number = 0;
       this.sum_number = 0;
       this.theme_number = _.random(1, 19);
-      return $('#theme_number_area').html(this.theme_number);
+      $('#theme_number_area').html(this.theme_number);
+      return $('#point').html(this.point);
     },
     setBind: function() {
       var self;
       self = this;
       $('#start').bind('click', function() {
+        self.showSelecter('#setting');
+        return self.hideSelecter('#start');
+      });
+      $('#play_game').bind('click', function() {
+        self.getParameter();
+        console.log(self.width_tile);
+        console.log(self.height_tile);
+        self.setParameter(1, 10, 50);
         return self.startGame();
       });
-      $('.play_number').bind('click', function() {
+      $('#tile_area').on('click', '.play_number', function() {
         return self.choiceNumber(this);
       });
       return $('#reset').bind('click', function() {
-        return self.changeStage();
+        self.showSelecter('#setting');
+        self.hideSelecter('#reset');
+        return self.hideSelecter('#play_area');
       });
     },
+    getParameter: function() {
+      var height, width;
+      width = width_setting.width_number.value;
+      height = height_setting.height_number.value;
+      this.width_tile = Number(width);
+      this.height_tile = Number(height);
+      console.log(this.width_tile);
+      return console.log(this.height_tile);
+    },
     startGame: function() {
-      this.round = 1;
-      $('#round').html(this.round);
-      this.point = 50;
-      $('#point').html(this.point);
-      this.hideSelecter('#start');
+      this.increaseHeightTile();
       this.showSelecter('.before_game');
-      $('#round').css({
-        'display': 'inline'
+      $('#round').html(this.round);
+      $('.play_number').css({
+        'pointer-events': 'auto'
       });
       this.showThemeNumber();
-      this.initial_count = 10;
-      this.count = this.initial_count;
+      this.hideSelecter('.to_next_game');
+      this.hideSelecter('#setting');
       return this.startCountTime();
     },
     choiceNumber: function(selecter) {
       var choice_number;
+      choice_number = $(selecter).data('number');
       if ($(selecter).hasClass('unusable')) {
         $(selecter).removeClass('unusable');
+        this.click_count += 1;
         this.sum_number -= choice_number;
-        return $(selecter).css({
-          'background-color': 'white'
-        });
+        return this.click_number -= 1;
       } else {
-        choice_number = $(selecter).data('number');
-        this.click_count -= 1;
-        this.sum_number = this.sum_number + choice_number;
-        this.click_number += 1;
         $(selecter).addClass('unusable');
-        $(selecter).css({
-          'background-color': 'gray'
-        });
+        this.click_count -= 1;
+        this.sum_number += choice_number;
+        this.click_number += 1;
         return this.calculationResult();
       }
     },
     calculationResult: function() {
       if (this.sum_number === this.theme_number) {
-        this.showSelecter('#answer_area');
-        $('#answer_area').removeClass('wrong_answer');
-        $('#answer_area').addClass('correct_answer');
-        $('#answer_area').html("good");
+        this.showResult('wrong_answer', 'correct_answer', "good");
         this.disableTile('.unusable');
-        $('.unusable').css({
-          'pointer-events': 'none'
-        });
         this.point += this.click_number * 10;
-        $('#point').html(this.point);
         this.showThemeNumber();
         this.count = this.initial_count;
         this.startCountTime();
-        this.showGameResult(this.round, 3, "Excellent");
-        if (this.click_count <= this.next_stage_number) {
-          this.round += 1;
-          return this.changeStage();
-        }
+        return this.toNextGame();
       } else if (this.sum_number > this.theme_number) {
-        this.showSelecter('#answer_area');
-        $('#answer_area').removeClass('correct_answer');
-        $('#answer_area').addClass('wrong_answer');
-        $('#answer_area').html("bad");
+        this.showResult('correct_answer', 'wrong_answer', "bad");
         this.disableTile('.unusable');
-        $('.unusable').css({
-          'pointer-events': 'none'
-        });
         this.point -= 10;
-        $('#point').html(this.point);
         this.showThemeNumber();
         this.count = this.initial_count;
         this.startCountTime();
         this.showGameResult(this.point, 0, "GameOver");
-        if (this.click_count <= this.next_stage_number) {
-          this.round += 1;
-          return this.changeStage();
-        }
+        return this.toNextGame();
       }
+    },
+    toNextGame: function() {
+      if (this.click_count <= this.NEXT_STAGE_NUMBER) {
+        this.round += 1;
+        return this.changeStage();
+      }
+    },
+    showResult: function(remove, add, result) {
+      this.showSelecter('#answer_area');
+      $('#answer_area').removeClass(remove);
+      $('#answer_area').addClass(add);
+      return $('#answer_area').html(result);
     },
     disableTile: function(selecter) {
       $(selecter).css({
@@ -214,30 +210,15 @@
       }
     },
     resetStage: function() {
-      this.choiceParameter();
-      this.round = 1;
-      this.startGame();
-      this.hideSelecter('.to_next_game');
-      $('.play_number').css({
-        'pointer-events': 'auto'
-      });
-      this.increaseHeightTile();
-      return this.setBind();
+      this.setParameter(1, 10, 50);
+      return this.startGame();
     },
     changeNextStage: function() {
-      this.choiceParameter();
+      this.setParameter(this.round, this.initial_count - 1, this.point);
       this.height_tile += 1;
       this.width_tile += 1;
-      this.initial_count -= 1;
-      this.count = this.initial_count;
-      $('.play_number').css({
-        'pointer-events': 'auto'
-      });
-      this.increaseHeightTile();
-      this.showThemeNumber();
-      this.startCountTime();
-      this.setBind();
-      return $('#round').html(this.round);
+      this.startGame();
+      return this.showGameResult(this.round, 3, "Excellent");
     }
   };
 

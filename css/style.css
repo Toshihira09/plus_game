@@ -2,6 +2,10 @@ body{
   background: linear-gradient(-225deg, #2CD8D5 0%, #C5C1FF 56%, #FFBAC3 85%);
 }
 
+.before_game{
+  display:none
+}
+
 #round_area{
   position: relative;
   top: 15%;
@@ -72,6 +76,11 @@ body{
   border: 6px ridge;
   background-color: white;
 }
+
+.unusable{
+ background-color: gray;
+}
+
 
 .correct_answer{
   background-color: yellow;
