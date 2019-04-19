@@ -8,6 +8,11 @@ body{
   padding: 15%;
 }
 
+h1:first-letter{
+  color: #FF367F;
+  font-size: 200%;
+}
+
 .button{
   border : solid 4px #b3b3b3 ;
   border-top : solid 4px #e0e0e0 ;
