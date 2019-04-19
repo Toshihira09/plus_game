@@ -29,7 +29,7 @@ window.app =
     self = @
     $('#start').bind 'click', ->
       self.showSelecter '#setting'
-      self.hideSelecter '#start'
+      self.hideSelecter '.start_screen'
     $('#play_game').bind 'click', ->
       self.getParameter()
     $('#tile_area').on 'click', '.play_number', ->

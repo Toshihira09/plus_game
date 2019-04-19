@@ -2,51 +2,54 @@ body{
   background: linear-gradient(-225deg, #2CD8D5 0%, #C5C1FF 56%, #FFBAC3 85%);
 }
 
-.before_game{
-  display: none
-}
-
-#round_area{
-  position: relative;
-  top: 15%;
-  left: 49%;
-  font-size: 35px;
+#title{
+  font-size: 50px;
+  text-align: center;
+  padding: 15%;
 }
 
 #start{
-  position: relative;
+  width: 200px;
   top: 40%;
   left: 45%;
+  margin-left: 40%;
 }
 
-#reset{
-  position: relative;
-  left: 44%;
-  top: 16%;
+#setting{
+  width: 314px;
+  margin-left: 35%;
+  text-align: center
+}
+
+input{
+  width: 106px;
+  height: 106px;
+  font-size: 50px;
+  text-align: center;
+}
+
+.game_situation{
+  margin-right: 20%;
+  float: right;
+  clear: both;
 }
 
 #play_area{
-  position: relative;
-  top: 20%;
-  left: 40%;
+  display: none;
+  margin-top: 10%;
 }
 
-#tile_area{
+#point_area{
   font-size: 30px;
-  position: relative;
 }
 
-#count_area{
-  position: relative;
+#round_area{
+  font-size: 35px;
 }
 
 #count{
   font-size: 30;
   font-family: fantasy;
-}
-
-#theme_number{
-  position: relative;
 }
 
 #theme_number_area{
@@ -57,30 +60,7 @@ body{
 
 #answer_area{
   font-size: 40px;
-  position: relative;
 }
-
-#point_area{
-  position: relative;
-}
-
-#point{
-  font-size: 30px;
-  position: relative;
-}
-
-.play_number{
-  width: 40px;
-  height: 40px;
-  text-align: center;
-  border: 6px ridge;
-  background-color: white;
-}
-
-.unusable{
- background-color: gray;
-}
-
 
 .correct_answer{
   background-color: yellow;
@@ -98,16 +78,37 @@ body{
   text-align: center;
 }
 
+#reset{
+  top: 16%;
+}
+
 #game_result{
-  position: relative;
   font-size: 30px;
   border: 3px;
   background-color: red;
   color: white;
   width: 170;
   text-align: center;
-  left: 46%;
-  top: -300px;
 }
 
+#tile_frame{
+  margin-left: 10%;
+}
+
+#tile_area{
+  font-size: 30px;
+  display: block;
+}
+
+.play_number{
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  border: 6px ridge;
+  background-color: white;
+}
+
+.unusable{
+ background-color: gray;
+}
 

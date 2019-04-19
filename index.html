@@ -6,33 +6,34 @@
     <link href="./css/style.css" rel="stylesheet" type="text/css" />
   </head>
 <body>
-
-  <div id="start"><img src="image/start.png" alt=""></div>
-
-  <div id="setting">
-    <div id="caution"></div>
-    <form id="width_setting">
-      ヨコ
-    <input type="number" name="width_number" min="5" max="10">
-    </form>
-    <form id="height_setting">
-      タテ
-    <input type="number" name="height_number" min="5" max="10">
-    </form>
-    <div id="play_game"><img src="image/play_game.png" alt=""></div>
-  </div>
-
-  <div id="play_area">
-    <div id="round_area" class="before_game">LV<span id="round"></span></div>
-    <table id="tile_area" class="before_game">
-    </table>
-    <div id="count_area" class="before_game">残り<span id="count"></span>秒</div>
-    <div id="theme_number" class="before_game">この数字だ！！<span id="theme_number_area"></span></div>
-    <div id="answer_area" class="before_game to_next_game"></div>
-    <div id="point_area" class="before_game">点数</div>
-    <div id="point" class="before_game"></div>
-    <div id="reset" class="before_game to_next_game"></div>
-    <div id="game_result" class="before_game to_next_game"></div>
+  <div id="play_screen">
+    <div id="title" class="start_screen">プラスゲーム</div>
+    <div id="start" class="start_screen"><img src="image/start.png" alt=""></div>
+    <div id="setting">
+      <div id="caution"></div>
+      <form id="width_setting">
+        <label for="width_number">ヨコ</label>
+        <input type="number" name="width_number" min="5" max="10">
+      </form>
+      <form id="height_setting">
+        <label for="height_number">タテ</label>
+        <input type="number" name="height_number" min="5" max="10">
+      </form>
+      <div id="play_game"><img src="image/play_game.png" alt=""></div>
+    </div>
+    <div id="play_area">
+      <div id="point_area" class="game_situation">SCORE <span id="point"></span></div>
+      <div id="round_area" class="game_situation">LV <span id="round"></span></div>
+      <div id="count_area" class="game_situation">TIME <span id="count"></span></div>
+      <div id="theme_number" class="game_situation">MISSION <span id="theme_number_area"></span></div>
+      <div id="answer_area" class="to_next_game game_situation"></div>
+      <div id="reset" class="to_next_game game_situation"></div>
+      <div id="game_result" class="to_next_game game_situation"></div>
+      <div id="tile_frame">
+        <table id="tile_area">
+        </table>
+      </div>
+    </div>
   </div>
 
 

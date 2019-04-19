@@ -37,7 +37,7 @@
       self = this;
       $('#start').bind('click', function() {
         self.showSelecter('#setting');
-        return self.hideSelecter('#start');
+        return self.hideSelecter('.start_screen');
       });
       $('#play_game').bind('click', function() {
         return self.getParameter();
