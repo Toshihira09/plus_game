@@ -8,7 +8,7 @@
 <body>
   <div id="play_screen">
     <div id="title" class="start_screen">プラスゲーム</div>
-    <div id="start" class="start_screen"><img src="image/start.png" alt=""></div>
+    <div id="start" class="start_screen button"><img src="image/start.png" alt=""></div>
     <div id="setting">
       <div id="caution"></div>
       <form id="width_setting">
@@ -19,7 +19,7 @@
         <label for="height_number">タテ</label>
         <input type="number" name="height_number" min="5" max="10">
       </form>
-      <div id="play_game"><img src="image/play_game.png" alt=""></div>
+      <div id="play_game" class="button"><img src="image/play_game.png" alt=""></div>
     </div>
     <div id="play_area">
       <div id="point_area" class="game_situation">SCORE <span id="point"></span></div>
@@ -27,7 +27,7 @@
       <div id="count_area" class="game_situation">TIME <span id="count"></span></div>
       <div id="theme_number" class="game_situation">MISSION <span id="theme_number_area"></span></div>
       <div id="answer_area" class="to_next_game game_situation"></div>
-      <div id="reset" class="to_next_game game_situation"></div>
+      <div id="reset" class="to_next_game game_situation button"></div>
       <div id="game_result" class="to_next_game game_situation"></div>
       <div id="tile_frame">
         <table id="tile_area">
