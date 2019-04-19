@@ -19,6 +19,10 @@ h1:first-letter{
   border-bottom : solid 4px #717171 ;
 }
 
+.button:hover{
+  opacity: 0.7;
+}
+
 #start{
   width: 200px;
   top: 40%;
